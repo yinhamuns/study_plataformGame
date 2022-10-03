@@ -27,13 +27,31 @@ public class Player : MonoBehaviour
     [Header("Animation Player")]
 
     public string boolRun = "Run";
+    public string triggerDeath = "Death";
     public Animator animator;
     public float playerSwipeDuration = .1f;
 
 
     private float _currentSpeed;
 
+    public HealthBase healthBase;
 
+
+    private void Awake()
+    {
+
+        if (healthBase != null)
+        {
+            healthBase.OnKill += OnPlayerKill;
+        }
+    }
+
+    private void OnPlayerKill()
+    {
+        healthBase.OnKill -= OnPlayerKill;
+
+        animator.SetTrigger(triggerDeath);
+    }
 
 
 
@@ -96,12 +114,13 @@ public class Player : MonoBehaviour
 
         if(myRigibody.velocity.x > 0)
         {
-            myRigibody.velocity += friction;
+ 
+                myRigibody.velocity -= friction;
         }
 
         else if (myRigibody.velocity.x < 0)
         {
-            myRigibody.velocity -= friction;
+            myRigibody.velocity += friction;
         }
     }
 
@@ -123,5 +142,10 @@ public class Player : MonoBehaviour
     {
         myRigibody.transform.DOScaleY(jumpScaleY, animationDuration).SetLoops(2, LoopType.Yoyo).SetEase(ease);
         myRigibody.transform.DOScaleX(jumpScaleX, animationDuration).SetLoops(2, LoopType.Yoyo).SetEase(ease);
+    }
+
+    public void DestroyMe()
+    {
+        Destroy(gameObject);
     }
 }
