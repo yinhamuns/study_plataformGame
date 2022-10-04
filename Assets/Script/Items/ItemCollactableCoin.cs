@@ -5,9 +5,23 @@ using UnityEngine;
 public class ItemCollactableCoin : ItemCollectableBase
 
 {
+    public string color;
+
+
+
     protected override void OnCollect()
     {
         base.OnCollect();
-        ItemManager.Instance.AddCoins();
+
+        if (color == "Red")
+        {
+            ItemManager.Instance.AddCoins("Red");
+        }
+        else
+        {
+            ItemManager.Instance.AddCoins();
+        }
+        
+       
     }
 }
